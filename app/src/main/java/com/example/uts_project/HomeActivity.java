@@ -27,7 +27,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private CardView cardIncome, cardExpense, cardSavingGoal;
     private BottomNavigationView bottomNavigationView;
-    private TextView tvViewAll;
     private RecyclerView rvTransactions;
     private List<financeRecord> financeRecordList;
     private financeRecordAdapter financeRecordAdapter;
