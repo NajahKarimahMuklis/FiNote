@@ -1,0 +1,15 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="8dp" app:cardCornerRadius="8dp" app:cardElevation="2dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <TextView android:id="@+id/textExpenseName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Nama Pengeluaran" android:textSize="16sp" android:textStyle="bold" android:textColor="#000000"/>
+        <TextView android:id="@+id/textExpenseAmount" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rp 0.00" android:textSize="14sp" android:textColor="#F44336" android:layout_marginTop="4dp"/>
+        <TextView android:id="@+id/textExpenseDescription" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Deskripsi" android:textSize="14sp" android:textColor="#666666" android:layout_marginTop="4dp"/>
+        <TextView android:id="@+id/textExpenseDate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tanggal" android:textSize="14sp" android:textColor="#666666" android:layout_marginTop="4dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/options"
+            android:layout_height="23dp"
+            android:paddingLeft="250dp"
+            android:src="@drawable/ic_more_vert" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

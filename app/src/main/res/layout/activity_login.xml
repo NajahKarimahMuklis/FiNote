@@ -133,7 +133,7 @@
                     android:layout_gravity="center"
                     android:text="Belum punya akun? "/>
                 <TextView
-                    android:id="@+id/createaccount"
+                    android:id="@+id/signup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

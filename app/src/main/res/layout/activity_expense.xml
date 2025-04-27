@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".ExpenseActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="57dp"
+                    android:paddingTop="4dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_back"
+                    android:contentDescription="Back"
+
+                    android:scaleType="fitCenter"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:id="@+id/incomeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="List Pengeluaran"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="#003368"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif-medium" />
+            </RelativeLayout>
+
+
+            <!-- Input: Nama Pengeluaran -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxStrokeColor="#003368"
+                app:hintTextColor="#003368">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editExpenseName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Pengeluaran"
+                    android:textSize="16sp"
+                    android:padding="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input: Jumlah Pengeluaran -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxStrokeColor="#003368"
+                app:hintTextColor="#003368">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editExpenseAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Jumlah Pengeluaran"
+                    android:textSize="16sp"
+                    android:padding="14dp"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input: Deskripsi -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxStrokeColor="#003368"
+                app:hintTextColor="#003368">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editExpenseDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Deskripsi"
+                    android:textSize="16sp"
+                    android:padding="14dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Input: Tanggal -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxStrokeColor="#003368"
+                app:hintTextColor="#003368">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editExpenseDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tanggal Pengeluaran"
+                    android:textSize="16sp"
+                    android:padding="14dp"
+                    android:focusable="false"
+                    android:clickable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Tombol Tambah -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddExpense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tambahkan"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:padding="14dp"
+                android:layout_marginBottom="24dp"
+                app:cornerRadius="12dp"
+                android:backgroundTint="#003368"
+                app:icon="@drawable/add"
+                app:iconGravity="textStart"
+                app:iconTint="#FFFFFF" />
+
+            <!-- Judul RecyclerView -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pengeluaran Saya"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#003368"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Daftar Pengeluaran -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewExpenses"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_expense" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_bottom_nav_rounded"
+        app:itemIconTint="@color/bottom_nav_colors"
+        app:itemTextColor="@color/bottom_nav_colors"
+        app:itemIconSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_shape"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
