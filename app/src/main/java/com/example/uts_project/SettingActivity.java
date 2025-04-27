@@ -19,8 +19,12 @@ public class SettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+<<<<<<< HEAD
 
 
+=======
+        
+>>>>>>> 04907e4db5215acf6398ec9d103d0fab91e6319d
         btnLogout = findViewById(R.id.btnLogout);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
