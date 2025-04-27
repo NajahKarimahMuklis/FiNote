@@ -1,6 +1,5 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#00336b">
 
-    <!-- Top Navigation Bar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -18,7 +17,6 @@
             android:contentDescription="Back"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Main Content Card with ScrollView -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,7 +28,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <!-- ScrollView -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -42,7 +39,6 @@
                 android:padding="16dp"
                 android:background="#ffffff">
 
-                <!-- Title -->
                 <TextView
                     android:id="@+id/myPlansTitle"
                     android:layout_width="wrap_content"
@@ -56,7 +52,6 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
-                <!-- First Saving Plan -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/firstPlanCard"
                     android:layout_width="match_parent"
@@ -74,7 +69,6 @@
                         android:padding="16dp"
                         android:background="#ffffff">
 
-                        <!-- Fixed icon position -->
                         <ImageButton
                             android:id="@+id/iconSelectorButton"
                             android:layout_width="65dp"
@@ -86,7 +80,6 @@
                             app:layout_constraintTop_toTopOf="@+id/savingGoalNameEdit"
                             app:layout_constraintBottom_toBottomOf="@+id/savingGoalNameEdit"/>
 
-                        <!-- Text field for saving goal name -->
                         <EditText
                             android:id="@+id/savingGoalNameEdit"
                             android:layout_width="0dp"
@@ -102,7 +95,6 @@
                             app:layout_constraintStart_toEndOf="@+id/iconSelectorButton"
                             app:layout_constraintTop_toTopOf="parent"/>
 
-                        <!-- Add transaction button -->
                         <ImageButton
                             android:id="@+id/addTransactionButton"
                             android:layout_width="48dp"
@@ -113,7 +105,6 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/savingGoalNameEdit"/>
 
-                        <!-- Progress bar -->
                         <TextView
                             android:id="@+id/progressPercentage"
                             android:layout_width="wrap_content"
@@ -141,7 +132,6 @@
                             app:layout_constraintStart_toEndOf="@+id/iconSelectorButton"
                             app:layout_constraintTop_toBottomOf="@+id/savingGoalNameEdit"/>
 
-                        <!-- Modified TextView for amounts -->
                         <TextView
                             android:id="@+id/savedAmount"
                             android:layout_width="wrap_content"
@@ -194,7 +184,6 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/targetAmount"/>
 
-                        <!-- Show transactions button -->
                         <ImageButton
                             android:id="@+id/showTransactionsButton"
                             android:layout_width="48dp"
@@ -206,7 +195,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/savedLabel"/>
 
-                        <!-- Recent Transactions List (Initially Gone) -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/transactionsRecyclerView"
                             android:layout_width="match_parent"
@@ -219,7 +207,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Add Transaction Dialog (Initially Gone) -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/addTransactionCard"
                     android:layout_width="match_parent"
@@ -312,7 +299,6 @@
                                 android:textColor="#393a36"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <!-- Target amount input -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/targetAmountInputLayout"
                             android:layout_width="match_parent"
@@ -326,7 +312,7 @@
                                 android:id="@+id/targetAmountEditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Tujuan Tabungan (Rp)"
+                                android:hint="Target Nominal Tabungan (Rp)"
                                 android:textColor="#393a36"
                                 android:inputType="numberDecimal"/>
                         </com.google.android.material.textfield.TextInputLayout>

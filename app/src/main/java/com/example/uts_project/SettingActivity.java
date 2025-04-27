@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingActivity extends AppCompatActivity {
 
-    CheckBox darkModeCheckBox, notificationsCheckBox;
     Button btnLogout;
     BottomNavigationView bottomNavigationView;
 
@@ -21,8 +20,7 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        darkModeCheckBox = findViewById(R.id.darkModeCheckBox);
-        notificationsCheckBox = findViewById(R.id.notificationsCheckBox);
+
         btnLogout = findViewById(R.id.btnLogout);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 

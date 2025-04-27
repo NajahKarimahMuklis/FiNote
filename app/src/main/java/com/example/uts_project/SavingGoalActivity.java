@@ -1,6 +1,7 @@
 package com.example.uts_project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class SavingGoalActivity extends AppCompatActivity {
+    private ImageButton backButton;
     private ImageButton addTransactionButton;
     private ImageButton showTransactionsButton;
     private CardView addTransactionCard;
@@ -43,8 +45,6 @@ public class SavingGoalActivity extends AppCompatActivity {
     private List<Transaction> transactions = new ArrayList<>();
     private transactionAdapter transactionAdapter;
     private boolean isTransactionsVisible = false;
-
-    // SharedPreferences untuk menyimpan data
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "SavingGoalPrefs";
     private static final String KEY_TARGET_AMOUNT = "targetAmount";
@@ -55,16 +55,17 @@ public class SavingGoalActivity extends AppCompatActivity {
     private static final String KEY_TRANSACTION_AMOUNT_PREFIX = "transactionAmount_";
     private static final String KEY_TRANSACTION_NOTE_PREFIX = "transactionNote_";
     private static final String KEY_TRANSACTION_TIME_PREFIX = "transactionTime_";
+    private static final String KEY_TRANSACTIONS_VISIBLE = "transactionsVisible";
+
+    // Tambahkan USER_ID untuk memisahkan data berdasarkan user
+    private static final String KEY_USER_ID = "currentUserId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saving_goal);
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-        // Initialize views
+        backButton = findViewById(R.id.backButton);
         addTransactionButton = findViewById(R.id.addTransactionButton);
         showTransactionsButton = findViewById(R.id.showTransactionsButton);
         addTransactionCard = findViewById(R.id.addTransactionCard);
@@ -77,29 +78,33 @@ public class SavingGoalActivity extends AppCompatActivity {
         savedLabel = findViewById(R.id.savedLabel);
         targetLabel = findViewById(R.id.targetLabel);
 
-        // Load saved data
-        loadData();
+        initializeSharedPreferences();
 
-        // Set up UI based on loaded data
-        setupUI();
-
-        // Set up RecyclerView
+        transactions = new ArrayList<>();
         transactionAdapter = new transactionAdapter(this, transactions);
         transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         transactionsRecyclerView.setAdapter(transactionAdapter);
 
-        // Set click listeners
+        loadData();
+
+        setupUI();
+
         setupClickListeners();
     }
 
+    private void initializeSharedPreferences() {
+        SharedPreferences userPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userId = userPrefs.getString(KEY_USER_ID, "default_user");
+
+        sharedPreferences = getSharedPreferences(PREFS_NAME + "_" + userId, Context.MODE_PRIVATE);
+    }
+
     private void setupUI() {
-        // Set goal name if available
         String goalName = sharedPreferences.getString(KEY_GOAL_NAME, "");
         if (!goalName.isEmpty()) {
             savingGoalNameEdit.setText(goalName);
         }
 
-        // Show or hide progress indicators based on whether target is set
         if (isTargetSet) {
             progressBar.setVisibility(View.VISIBLE);
             savedAmountText.setVisibility(View.VISIBLE);
@@ -108,27 +113,26 @@ public class SavingGoalActivity extends AppCompatActivity {
             targetLabel.setVisibility(View.VISIBLE);
             progressPercentageText.setVisibility(View.VISIBLE);
 
-            // Disable target amount field if already set
             EditText targetAmountEditText = findViewById(R.id.targetAmountEditText);
             if (targetAmountEditText != null) {
                 targetAmountEditText.setText(String.valueOf(targetAmount));
                 targetAmountEditText.setEnabled(false);
             }
 
-            // Update the progress UI
             updateProgressUI();
         } else {
             progressBar.setVisibility(View.GONE);
         }
+
+        isTransactionsVisible = sharedPreferences.getBoolean(KEY_TRANSACTIONS_VISIBLE, false);
+        transactionsRecyclerView.setVisibility(isTransactionsVisible ? View.VISIBLE : View.GONE);
     }
 
     private void loadData() {
-        // Load basic data
         savedAmount = Double.longBitsToDouble(sharedPreferences.getLong(KEY_SAVED_AMOUNT, Double.doubleToLongBits(0)));
         targetAmount = Double.longBitsToDouble(sharedPreferences.getLong(KEY_TARGET_AMOUNT, Double.doubleToLongBits(0)));
         isTargetSet = sharedPreferences.getBoolean(KEY_IS_TARGET_SET, false);
 
-        // Load transactions
         int transactionCount = sharedPreferences.getInt(KEY_TRANSACTION_COUNT, 0);
         transactions.clear();
 
@@ -140,22 +144,33 @@ public class SavingGoalActivity extends AppCompatActivity {
             Transaction transaction = new Transaction(amount, note, timestamp);
             transactions.add(transaction);
         }
+
+        if (transactionAdapter != null) {
+            transactionAdapter.notifyDataSetChanged();
+        }
     }
 
     private void saveData() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // Save goal name
         String goalName = savingGoalNameEdit.getText().toString();
         editor.putString(KEY_GOAL_NAME, goalName);
 
-        // Save basic data
         editor.putLong(KEY_SAVED_AMOUNT, Double.doubleToLongBits(savedAmount));
         editor.putLong(KEY_TARGET_AMOUNT, Double.doubleToLongBits(targetAmount));
         editor.putBoolean(KEY_IS_TARGET_SET, isTargetSet);
-
-        // Save transactions
+        editor.putBoolean(KEY_TRANSACTIONS_VISIBLE, isTransactionsVisible);
         editor.putInt(KEY_TRANSACTION_COUNT, transactions.size());
+
+        SharedPreferences.Editor clearEditor = sharedPreferences.edit();
+        int oldCount = sharedPreferences.getInt(KEY_TRANSACTION_COUNT, 0);
+        for (int i = 0; i < oldCount; i++) {
+            clearEditor.remove(KEY_TRANSACTION_AMOUNT_PREFIX + i);
+            clearEditor.remove(KEY_TRANSACTION_NOTE_PREFIX + i);
+            clearEditor.remove(KEY_TRANSACTION_TIME_PREFIX + i);
+        }
+        clearEditor.apply();
+
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
             editor.putLong(KEY_TRANSACTION_AMOUNT_PREFIX + i, Double.doubleToLongBits(transaction.getAmount()));
@@ -167,9 +182,12 @@ public class SavingGoalActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Add transaction button
+        backButton.setOnClickListener(v -> {
+            saveData();
+            navigateToHome();
+        });
+
         addTransactionButton.setOnClickListener(v -> {
-            // Toggle visibility of add transaction card
             if (addTransactionCard.getVisibility() == View.VISIBLE) {
                 addTransactionCard.setVisibility(View.GONE);
             } else {
@@ -180,24 +198,29 @@ public class SavingGoalActivity extends AppCompatActivity {
         showTransactionsButton.setOnClickListener(v -> {
             isTransactionsVisible = !isTransactionsVisible;
             transactionsRecyclerView.setVisibility(isTransactionsVisible ? View.VISIBLE : View.GONE);
+            sharedPreferences.edit().putBoolean(KEY_TRANSACTIONS_VISIBLE, isTransactionsVisible).apply();
         });
 
-        // Save transaction button
         Button saveTransactionButton = findViewById(R.id.saveTransactionButton);
         saveTransactionButton.setOnClickListener(v -> saveTransaction());
 
-        // Cancel transaction button
         Button cancelTransactionButton = findViewById(R.id.cancelTransactionButton);
         cancelTransactionButton.setOnClickListener(v -> {
             addTransactionCard.setVisibility(View.GONE);
         });
 
-        // Save goal name when it changes
         savingGoalNameEdit.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 saveData();
             }
         });
+    }
+
+    private void navigateToHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     private void saveTransaction() {
@@ -219,7 +242,6 @@ public class SavingGoalActivity extends AppCompatActivity {
             double amount = Double.parseDouble(amountStr);
             boolean isDeposit = depositRadioButton.isChecked();
 
-            // Process the target amount if provided
             if (!targetAmountStr.isEmpty() && !isTargetSet) {
                 targetAmount = Double.parseDouble(targetAmountStr);
                 if (targetAmount <= 0) {
@@ -227,32 +249,28 @@ public class SavingGoalActivity extends AppCompatActivity {
                     return;
                 }
                 isTargetSet = true;
-                targetAmountEditText.setEnabled(false); // Disable editing after setting
+                targetAmountEditText.setEnabled(false);
             } else if (targetAmountStr.isEmpty() && !isTargetSet) {
                 Toast.makeText(this, "Masukkan target tabungan", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Add the transaction
             Transaction transaction = new Transaction(
                     isDeposit ? amount : -amount,
                     note,
                     System.currentTimeMillis()
             );
 
-            transactions.add(0, transaction); // Add to the beginning of the list
+            transactions.add(0, transaction);
             transactionAdapter.notifyItemInserted(0);
 
-            // Update saved amount
             if (isDeposit) {
                 savedAmount += amount;
             } else {
                 savedAmount -= amount;
-                // Make sure we don't go below zero
                 if (savedAmount < 0) savedAmount = 0;
             }
 
-            // Show progress indicators now that we have a transaction
             progressBar.setVisibility(View.VISIBLE);
             savedAmountText.setVisibility(View.VISIBLE);
             targetAmountText.setVisibility(View.VISIBLE);
@@ -260,21 +278,18 @@ public class SavingGoalActivity extends AppCompatActivity {
             targetLabel.setVisibility(View.VISIBLE);
             progressPercentageText.setVisibility(View.VISIBLE);
 
-            // Update UI
             updateProgressUI();
 
-            // Save data to SharedPreferences
             saveData();
 
-            // Clear inputs and hide dialog
             amountEditText.setText("");
             noteEditText.setText("");
             addTransactionCard.setVisibility(View.GONE);
 
-            // Show the transactions if they're not visible
             if (!isTransactionsVisible) {
                 transactionsRecyclerView.setVisibility(View.VISIBLE);
                 isTransactionsVisible = true;
+                sharedPreferences.edit().putBoolean(KEY_TRANSACTIONS_VISIBLE, true).apply();
             }
 
             Toast.makeText(this, "Transaksi berhasil disimpan", Toast.LENGTH_SHORT).show();
@@ -285,21 +300,17 @@ public class SavingGoalActivity extends AppCompatActivity {
     }
 
     private void updateProgressUI() {
-        // Calculate percentage
         double percentage = (savedAmount / targetAmount) * 100;
         int progressValue = (int) percentage;
 
-        // Limit percentage to 100%
         if (progressValue > 100) {
             progressValue = 100;
         }
 
-        // Format the amounts with currency
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         String savedFormatted = currencyFormat.format(savedAmount).replace("Rp", "Rp");
         String targetFormatted = currencyFormat.format(targetAmount).replace("Rp", "Rp");
 
-        // Update UI elements
         savedAmountText.setText(savedFormatted);
         targetAmountText.setText(targetFormatted);
         progressPercentageText.setText(String.format("%.1f%%", percentage));
@@ -309,7 +320,20 @@ public class SavingGoalActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // Save data when activity is paused
         saveData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData();
+        setupUI();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveData();
+        navigateToHome();
     }
 }

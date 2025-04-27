@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="#000000"
-            android:text="Save Changes"/>
+            android:text="Simpan Perubahan"/>
 
     </LinearLayout>
 

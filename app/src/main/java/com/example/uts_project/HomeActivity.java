@@ -40,7 +40,6 @@ public class HomeActivity extends AppCompatActivity {
         cardIncome = findViewById(R.id.cardIncome);
         cardExpense = findViewById(R.id.cardExpense);
         cardSavingGoal = findViewById(R.id.cardSavingGoal);
-        tvViewAll = findViewById(R.id.tvViewAll);
         rvTransactions = findViewById(R.id.rvTransactions);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
